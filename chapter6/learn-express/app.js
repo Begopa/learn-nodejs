@@ -23,14 +23,14 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('secret code'));
 app.use(session({
-  resave: false,
-  saveUninitialized: false,
-  secret: 'secret code',
+  resave: false, // 요청이 왔을때 세션에 수정사항이 생기지 않더라도 세션을 저장할지 여부
+  saveUninitialized: false, // 세션에 저장할 내역이 없더라도 세션을 저장할지에 대한 설정
+  secret: 'secret code', //cookieParser의 비밀키와 같은 역할
   cookie: {
-    httpOnly: true,
-    secure: false,
+    httpOnly: true, // 클라이언트에서 쿠키 확인 못하게 설정
+    secure: false, // https가 아닌 환경에서도 사용가능
   },
 }));
 

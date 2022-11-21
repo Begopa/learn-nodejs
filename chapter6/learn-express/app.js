@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+var flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -33,6 +34,7 @@ app.use(session({
     secure: false, // https가 아닌 환경에서도 사용가능
   },
 }));
+app.use(flash()); // req 객체에 req.flash메서드 추가, req.flash(키, 값)으로 해당 값 설정, req.flash(키)로 해당 값 확인
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

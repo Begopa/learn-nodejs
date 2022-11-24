@@ -1,4 +1,4 @@
-eredconst local = require('./localStrategy');
+const local = require('./localStrategy');
 const kakao = require('./kakaoStrategy');
 const { User } = require('../models');
 
@@ -8,7 +8,7 @@ module.exports = (passport) => {
   });
   
   passport.deserializeUser((id, done) => {
-    User.fin({ wh: { id } })
+    User.find({ where: { id } })
       .then(user => done(null, user))
       .catch(err => done(err));
   });

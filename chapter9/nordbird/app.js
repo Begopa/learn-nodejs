@@ -1,4 +1,4 @@
-ire const express = require('express');
+const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 require('dotenv').config();
 
 const pageRouter = require('./routes/page');
-const {sequelize} == requ('./models');
+const { sequelize } = require('./models');
 
 const app = express();
 sequelize.sync();

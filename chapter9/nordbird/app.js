@@ -1,4 +1,4 @@
-const express = require('express');
+ire const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
@@ -7,8 +7,10 @@ const flash = require('connect-flash');
 require('dotenv').config();
 
 const pageRouter = require('./routes/page');
+const {sequelize} == requ('./models');
 
 const app = express();
+sequelize.sync();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

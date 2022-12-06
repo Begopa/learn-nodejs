@@ -3,6 +3,7 @@ const util = require('util');
 const googleMaps = require('@google/maps');
 
 const History = require('../schemas/history');
+const Favorite = require('../schemas/favorite');
 
 const router = express.Router();
 const googleMapsClient = googleMaps.createClient({
@@ -28,7 +29,7 @@ router.get('/autocomplete/:query', (req, res, next) => {
 router.get('/search/:query', async (req, res, next) => {
   const googlePlaces = util.promisify(googleMapsClient.places);
   const googlePlacesNearby = util.promisify(googleMapsClient.placesNearby);
-  const { lat, lng } = req.query;
+  const { lat, lng, type } = req.query;
   try {
     const history = new History({ query: req.params.query });
     await history.save();
@@ -39,11 +40,13 @@ router.get('/search/:query', async (req, res, next) => {
         location:`${lat},${lng}`,
         rankby: 'distance',
         language: 'ko',
+        type,
       });
     } else {
       response = await googlePlaces({
         query: req.params.query,
         language: 'ko',
+        type,
       });
     }
     res.render('result', {
@@ -51,6 +54,19 @@ router.get('/search/:query', async (req, res, next) => {
       results: response.json.results,
       query: req.params.query,
     });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.post('/location/:id/favorite', async (req, res, next) => {
+  try {
+    const favorite = await Favorite.create({
+      placeId: req.params.id,
+      name: req.body.name,
+      location: [req.body.lat, req.body.lng],
+    })
   } catch (error) {
     console.error(error);
     next(error);
